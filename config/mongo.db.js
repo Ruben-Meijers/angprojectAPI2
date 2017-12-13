@@ -6,7 +6,7 @@ mongoose.Promise = global.Promise;
 
 mongoose.connect(config.dburl);
 var connection = mongoose.connection
-    .once('open', () => console.log('Connected to Mongo on ' + config.dburl))
+    .once('open', () => console.log('connected to API'))
     .on('error', (error) => {
         console.warn('Warning', error.toString());
     });
