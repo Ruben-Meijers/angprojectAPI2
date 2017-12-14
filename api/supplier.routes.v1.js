@@ -28,21 +28,37 @@ routes.get('/suppliers', function (req, res) {
 });
 
 //get 1 supplier
-routes.get('/supplier/:id', function (req, res) {
+routes.get('/suppliers/:id', function (req, res) {
     res.contentType('application/json');
-
-  session.run("Match(n:Supplier) Where ID(n) =80 Return n")
+    const name = req.params.id;
+  session.run("MATCH (n:Supplier) WHERE toLower(n.name) CONTAINS toLower('"+name+"') RETURN { id:ID(n), name: n.name, age: n.age, telnummer: n.teltelnummer } as User")
         .then(function (result) {
+            // console.log(result);
             var supplier;
-            result.records.forEach(function(record){
-                supplier = new Supplier({
-                    id: record._fields[0].identity.low,
-                    name: record._fields[0].properties.name,
-                    age: record._fields[0].properties.age,
-                    telnummer: record._fields[0].properties.telnummer
-                });
+            var tmpArr = [];
+            result.records.forEach(function (record){
+                // console.log(record._fields);
+                var tmpId;
+                var tmpName;
+                var tmpAge;
+                var tmpTelnummer;
+                var tmp = new Supplier(record._fields);
+                var tempSupplier = [];
+                var tmpNodes = tmp._node[0];
+                tmpId = tmpNodes.id.low;  
+                tmpName = tmpNodes.name;
+                tmpAge = tmpNodes.age;
+                tmpTelnummer = tmpNodes.telnummer;
+                tempSupplier.push(tmpId);
+                tempSupplier.push(tmpName);
+                tempSupplier.push(tmpAge);
+                tempSupplier.push(tmpTelnummer);
+
+                tmpArr.push(tempSupplier);
+                console.log(tmpArr);            
+           
             })
-            res.status(200).json(supplier);
+            res.status(200).json(tmpArr);
         })
         .catch((error) => {
         console.log(error);
@@ -63,15 +79,14 @@ routes.post('/suppliers', function (req, res) {
 //edit supplier
 routes.put('/suppliers/:id', function (req, res) {
 
-    const b= req.body;
-    console.log(b);
+    const name = req.params.name;
     const supplier = new Supplier({
         _id: b._id,
         name: b.name,
         age: b.age,
         telnummer: b.telnummer
     });
-    session.run("Match(n:Supplier) Where n.name = '"+b.name+"' AND n.age = '"+b.age+"' AND n.telnummer= '"+b.telnummer+"' Return n")
+    session.run("Match(n:Supplier) Where n.name = '"+name+"' Create (b:Order {name: 'relorder', description: 'made during request'})<-[rel:Assigned_To]-(n)")
     .then(() => res.status(200).json(Supplier))
     .catch((error) => {
         res.status(400).json(error);

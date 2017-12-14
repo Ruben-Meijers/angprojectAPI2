@@ -20,11 +20,6 @@ routes.get('/orders', function (req, res) {
         res.status(400).json(error);
     });
 });
-
-//
-// Voeg een user toe. De nieuwe info wordt gestuurd via de body van de request message.
-// Vorm van de URL: POST http://hostname:3000/api/v1/users
-//
 routes.post('/orders/new', function (req, res) {
     console.log(req.body);
     const b = req.body;

@@ -4,7 +4,7 @@
   "description": "Node server met API naar mongodb database",
   "main": "server.js",
   "scripts": {
-    "test": "node node_modules/mocha/bin/_mocha ./test/*test.js --reporter spec",
+    "test": "./node_modules/.bin/mocha --reporter spec",
     "start": "nodemon server.js"
   },
   "repository": {
@@ -21,7 +21,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.2",
-    "express": "^4.15.2",
+    "express": "^4.16.2",
     "express-jwt": "^5.3.0",
     "jwt-simple": "^0.5.1",
     "moment": "^2.18.1",
@@ -36,7 +36,7 @@
     "gulp": "^3.9.1",
     "gulp-istanbul": "^1.1.2",
     "gulp-mocha": "^4.3.1",
-    "mocha": "^3.3.0",
+    "mocha": "^3.5.3",
     "nodemon": "^1.11.0"
   }
 }
